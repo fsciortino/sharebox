@@ -1,0 +1,7 @@
+from omfit_classes.omfit_eqdsk import OMFITgeqdsk
+
+geqdsk20 = OMFITgeqdsk('').from_mdsplus(device='DIII-D', shot=180520, time=2501)
+geqdsk26 = OMFITgeqdsk('').from_mdsplus(device='DIII-D', shot=180526, time=2750)
+geqdsk30 = OMFITgeqdsk('').from_mdsplus(device='DIII-D', shot=180530, time=3800)
+
+
