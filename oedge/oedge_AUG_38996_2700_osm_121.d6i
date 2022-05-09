@@ -1,6 +1,6 @@
 '+A01 Ref DIV Title' 'AUG, shot 38996, time 2.7' 
-'+A02 Run comment' 'Set up on 06/05/2022 12:09:22' 
-'+A03 Equil File Name' 'oedge_AUG_38996_2700_osm_116.sno' 
+'+A02 Run comment' 'Set up on 09/05/2022 22:05:14' 
+'+A03 Equil File Name' 'oedge_AUG_38996_2700_osm_121.sno' 
 $                                                 
 $                                                 
 $ ======================================================================
@@ -167,7 +167,7 @@ $
 '*026 PIN selection 0-NIMBUS 2-EIRENE99 4-EIRENE04 PINCODE (1)'          5                     
 '*010 Geometry data 0-standard 1-from DIVIMP     EIRGEOM'          1                     
 '*021 Input file    0-standard 1-from DIVIMP     EIRDATA'          1                     
-'*020 Run time (CPU seconds)                   EIRTIME  '         60 # Run EIRENE for a minute. 60 probably good, but can increase for good measure if you want.
+'*020 Run time (CPU seconds)                   EIRTIME  '         60 # EIRENE runtime (60s reasonable)
 '*E17 Number of EIRENE self-iterations         EIRNITER (1)'          0                     
 '*022 Material: target  1-Mo 2-C 3-W 4-Be      EIRMAT1  '          3                     
 '*024 wall                           EIRMAT2            '          2                     
@@ -213,8 +213,8 @@ $
 '*058 1.1 Pressure gauge specification:'   
 ' ' '     (dummy line) '                          
 'Code   x0(m)  y0(m)  tor(deg) rad(m) len   p(mTorrd)EIRNPGDAT'          2                     
-     101.0        1.2       -1.2        0.0       0.02        0.0      0.033
-     102.0        1.6      -1.25        0.0       0.04        0.0      0.033
+       1.0        1.2       -1.2        0.0       0.02        0.0 0.032139713105766896
+       2.0        1.6      -1.25        0.0       0.02        0.0 0.032139713105766896
 $                                                 
 $                                                 
 $ In order for EIRENE to include vessel structures that are attached to
@@ -264,7 +264,7 @@ $  33.0     3.0    19.0     19.0    3.5E+19       0.0
 $                                                 
 '*088 0.0 Outer (JET inner) target data for interpolation:'   
 ' ' '     (dummy line)                                        '
-'PSIN     Te     Ti    Jsat/Ne                     '        101 # Outer target entered as Psin, Te, Ti(=Te), Jsat (see switch Q32). First line and the extra zeros are just needed, idk.
+'PSIN     Te     Ti    Jsat/Ne                     '        101 # Outer target entered as Psin, Te, Ti(=Te), Jsat (see switch Q32). NB: need first dummy line and the extra zeros.
       -1.0        1.0      999.0        0.0
 0.9091840437299775 0.7943220984685126 0.7943220984685126 1.3279024518406902e+16        0.0        0.0        0.0
 0.9227445913127883 0.8095285007406687 0.8095285007406687 1.3946361022679766e+16        0.0        0.0        0.0
@@ -368,7 +368,7 @@ $
 1.0794144801619432 0.8076206311025089 0.8076206311025089 6537068325677353.0        0.0        0.0        0.0
 '*089 0.0 Inner (JET outer) target data for interpolation:'   
 ' ' '     (dummy line)                                        '
-'PSIN     Te     Ti    Jsat/Ne                     '        101 # Inner data = outer here, but can use inner if you have it. Makes matching at the midpoints difficult though.
+'PSIN     Te     Ti    Jsat/Ne                     '        101                     
       -1.0        1.0      999.0        0.0
 0.9570363344826209 2.640618566715485 2.640618566715485 2.020520180010294e+18        0.0        0.0        0.0
 0.959980524889054 2.418522913138691 2.418522913138691 2.472717414561828e+18        0.0        0.0        0.0
@@ -692,7 +692,7 @@ $ LPDATO AND LPDATI arrays) by the specified amount.  A positive shift
 $ moves the data outward (generally in the direction of increasing major
 $ radius) along the target.  The default for both quantities is 0.0.
 $                                                 
-'*078 Target data shift JET-i/o CMOD,DIIID-o/i (m)TARSHIFT'       -0.0        0.0 # Can shift input LP data (in m) to align better with upstream TS. Trial and error.
+'*078 Target data shift JET-i/o CMOD,DIIID-o/i (m)TARSHIFT'       -0.0        0.0 # Can shift input LP data (in m) to align better with upstream TS (more often, do the opposite). Trial and error.
 '+Q32 TN1347 Langmuir Probe Switch     0=Nb  1=Isat     '          0                     
 $                                                 
 $    NOTE: For DIIID grids with the Xpoint down the meaning of
@@ -701,7 +701,7 @@ $          following entry contains the data for the OUTER
 $          DIIID target  - it would contain the data for
 $          the inner target for a JET grid.       
 $                                                 
-'+Q33 OUTER Target Data Multipliers (Te,Ti,Nb):         '        1.0        1.0        1.0 # Anything between 0.5 and 2.0 generally fair game, moreso with Te/Ti.
+'+Q33 OUTER Target Data Multipliers (Te,Ti,Nb):         '        1.0        1.0        1.0 # Anything between 0.5 and 2.0 generally fair game, moreso with Te and Ti.
 '+Q34 ' 'Probe data at outer plate (opt4) or total (opt3)'
 'Ring , TeBP , TiBP , NBP : Number of rows -       '          0                     
 $                                                 
@@ -723,7 +723,7 @@ $
 'Ring , TeB , TiB , NB , Vb : Number of rows -     '          0                     
 '*Q44 ' 'CORE Plasma Data - for Core Options 1,2 and 3'
 ' ' '     (dummy line)                                        '
-'PSIN , TeB , TiB , NB , Vb : Number of rows -     '         48 # Core data. Mainly just do your best that values near psin = 1 are close to values on your first ring.
+'PSIN , TeB , TiB , NB , Vb : Number of rows -     '         48 # Core data. NB: user should ensure that values nearjust inside and outside of psin = 1 are close.
 0.5070248246192932 908.130615234375 908.130615234375 1.8834502242407547e+19        0.0
 0.5163680911064148 884.8712768554688 884.8712768554688 1.8696429970237948e+19        0.0
 0.5257974863052368 861.4490966796875 861.4490966796875 1.856234672625392e+19        0.0
@@ -1086,12 +1086,12 @@ $
 '+251 Switch: Ionization Opt : 0.0-exp 1.0+ - others    '        2.0                     
 '+252 Switch: Initial IonOpt : 0.0-exp 3.0+ - others    '        0.0                     
 '+253 Switch: PPlasma IonOpt : 0.0-exp 3.0+ - others    '       -1.0                     
-'+254 Switch: 5/2 nv * kT    : 0.0-off 1.0-on           '        1.0 # Primary SOL22 switches.
-'+255 Switch: 1/2 m v^3 * n  : 0.0-off 1.0-on           '        1.0 # Primary SOL22 switches.
-'+256 Switch: Prad           : 0.0-off 1.0-on           '          4 # Primary SOL22 switches.
-'+257 Switch: Phelpi         : 0.0-off 1.0-on           '        1.0 # Primary SOL22 switches.
-'+258 Switch: Pei            : 0.0-off 1.0-on           '        1.0 # Primary SOL22 switches.
-'+259 Switch: Pcx            : 0.0-off 1.0-on           '        1.0 # Primary SOL22 switches.
+'+254 Switch: 5/2 nv * kT    : 0.0-off 1.0-on           '        1.0          # IMPORTANT
+'+255 Switch: 1/2 m v^3 * n  : 0.0-off 1.0-on           '        1.0          # IMPORTANT
+'+256 Switch: Prad           : 0.0-off 1.0-on           '          0          # IMPORTANT
+'+257 Switch: Phelpi         : 0.0-off 1.0-on           '        3.0          # IMPORTANT
+'+258 Switch: Pei            : 0.0-off 1.0-on           '        1.0          # IMPORTANT
+'+259 Switch: Pcx            : 0.0-off 1.0-on           '        3.0          # IMPORTANT
 '+260 SUB-switch: Pcx Opt 4  : PINQID- Atomic Ioniz.    '        1.0                     
 '+261 SUB-switch: Pcx Opt 4  : PINQID- Molecular Ioniz  '        1.0                     
 '+262 SUB-switch: Pcx Opt 4  : PINQID- Recombination    '        1.0                     
@@ -1102,7 +1102,7 @@ $
 '+267 Switch: Momentum loss  : 0.0-off 1.0-on           '          1                     
 '*282 Extended Momentum loss option (header)'   
 ' ' ' Extended Momentum loss option Input Data                '
-'Number of lines of input  IR TARG2(F,L) TARG1(F,L)'         36 # Ring-by-ring specification of momentum loss (rectangular)
+'Number of lines of input  IR TARG2(F,L) TARG1(F,L)'         36 # Ring-by-ring specification of momentum loss
          1 0.2841389807706456       0.05 0.7505416541534825       0.05
          2 0.2912458824169377       0.05 0.7520458480151937       0.05
          3 0.2895308137105991       0.05 0.7553897668351595       0.05
@@ -1149,7 +1149,7 @@ $
 '+275 Switch: Major Radius   : 0.0-off 1.0-nor 2.0-inv  '        0.0                     
 '+276 Switch: Core Gamma Src : 0.0-off 1.0-all 2.0-xpt  '        0.0                     
 '+277 Switch: Recomb. Src    : 0.0-off 1.0-PIN          '        1.0                     
-'+278 Switch: Smooth Centres : 0.0-off 1.0-on           '          0 # Leave at zero until you are finished, then use 1.0 for a polished option. Shawn 's branch has a more agressive smoothing algorithm (2.0), reach out if interested.
+'+278 Switch: Smooth Centres : 0.0-off 1.0-on           '          0 # Leave at zero until you are finished, then use 1.0 for a polished option. Option 2 uses SZ 's more agressive smoothing algorithm.
 '+279 Switch: Detached Option: 0.0-off 1.0-out 2.0-in   '        0.0                     
 '+280 Switch: Error corrected: 0.0-off 1.0-cond         '       10.0                     
 '+281 ' 'Automatic DEFAULT Solver condition switches'
@@ -1217,7 +1217,7 @@ $'       EDGE2D Special Correction Option 0=off 1=on          '       0
 $                                                 
 $   SOL 23 - Input parameters                     
 $                                                 
-'+300 SOL23  Parameter read option  0-NO 1-YES          '          1 # Harrison 's SOL23 options. All are mysterious to me, and don' True do anything unless SOL option = 23.0
+'+300 SOL23  Parameter read option  0-NO 1-YES          '          1 # Harrison 's SOL23 options.
 $                                                 
 $   SOL 23 - Input parameters (s23_par_...)       
 $                                                 
