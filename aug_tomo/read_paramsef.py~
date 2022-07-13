@@ -1,0 +1,26 @@
+import numpy as np
+import matplotlib.pyplot as plt
+plt.ion()
+
+
+def read_paramsef(filename):
+    
+    with open(filename) as f:
+        contents = f.readlines()
+
+    line0 = contents.pop(0)
+    leng_r = int(line0.split()[0])
+    leng_z = int(line0.split()[1])
+    version = str(line0.split()[2])
+    
+    r = np.zeros(leng_r+1)
+    z = np.zeros(leng_z+1)
+    for i in np.arange(leng_r+1):
+        newline = contents.pop(0)
+        print(newline)
+        r[i] = float(newline)
+    for j in np.arange(leng_z+1):
+        newline = contents.pop(0)
+        print(newline)
+        z[j] = float(newline)
+                      

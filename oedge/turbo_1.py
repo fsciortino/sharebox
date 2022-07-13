@@ -123,20 +123,12 @@ def update_state(state, Y_next):
 
 
 # ## Take a look at the state
-
-# In[4]:
-
-
 state = TurboState(dim=dim, batch_size=batch_size)
 print(state)
 
 
 # ## Generate initial points
 # This generates an initial set of Sobol points that we use to start of the BO loop.
-
-# In[5]:
-
-
 def get_initial_points(dim, n_pts, seed=0):
     sobol = SobolEngine(dimension=dim, scramble=True, seed=seed)
     X_init = sobol.draw(n=n_pts).to(dtype=dtype, device=device)
@@ -284,9 +276,6 @@ while not state.restart_triggered:  # Run until TuRBO converges
 # ## GP-EI
 # As a baseline, we compare TuRBO to qEI
 
-# In[8]:
-
-
 X_ei = get_initial_points(dim, n_init)
 Y_ei = torch.tensor(
     [eval_objective(x) for x in X_ei], dtype=dtype, device=device
@@ -326,26 +315,16 @@ while len(Y_ei) < len(Y_turbo):
 
 
 # ## Sobol
-
-# In[9]:
-
-
 X_Sobol = SobolEngine(dim, scramble=True, seed=0).draw(len(X_turbo)).to(dtype=dtype, device=device)
 Y_Sobol = torch.tensor([eval_objective(x) for x in X_Sobol], dtype=dtype, device=device).unsqueeze(-1)
 
 
 # ## Compare the methods
 
-# In[10]:
-
-
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import rc
-
-get_ipython().run_line_magic('matplotlib', 'inline')
-
 
 names = ["TuRBO-1", "EI", "Sobol"]
 runs = [Y_turbo, Y_ei, Y_Sobol]
